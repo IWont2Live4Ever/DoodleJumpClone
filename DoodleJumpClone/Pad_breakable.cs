@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DoodleJumpClone
+{
+    internal class Pad_breakable : Pad
+    {
+        public Pad_breakable(int x, int y, int width, int height)
+        {
+            this.Hitbox = new Hitbox(x, y, width, height);
+            this.FlagTouched = false;
+        }
+        public Pad_breakable(int x, int y)
+        {
+            this.Hitbox = new Hitbox(x, y, Settings.WidthOfPad_defoult, Settings.HeightOfPad_defoult);
+            this.FlagTouched = false;
+        }
+        public Pad_breakable()
+        {
+            this.Hitbox = new Hitbox(0, 0, Settings.WidthOfPad_defoult, Settings.HeightOfPad_defoult);
+            this.FlagTouched = false;
+        }
+    }
+}
