@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,8 +15,6 @@ namespace DoodleJumpClone
     {
         int score;
         int highScore;
-
-        int heightOfShear;
 
         Vector velosity = Vector.GetZeroVector();
 
@@ -94,7 +92,7 @@ namespace DoodleJumpClone
             player.Hitbox.MoveTo(player.Velosity);
             player.Correct();
 
-            if (player.Hitbox.Y < heightOfShear)
+            if (player.Hitbox.Y < Settings.HeightOfShear)
             {
                 if (Equals(velosity, Vector.ZeroVector))
                 {
@@ -142,10 +140,14 @@ namespace DoodleJumpClone
             pictureBox.Invalidate();
         }
 
+        int I = 100; // Переменная для теста вывода изображения
         private void UpdatePictureBoxGraphics(object sender, PaintEventArgs e)
         {
             graphics = e.Graphics;
-            
+
+            graphics.FillEllipse(Brushes.Red, (int)(Settings.WidthOfFild / 2), (int)(Settings.HeightOfFild / 2), I, I); // Эти две строчки тестируют вывод изображения
+            I += 20;                                                                                                    // Круг должен увеличиваться со временем
+
             foreach (var pad in pads)
             {
                 graphics.FillRectangle(
@@ -167,16 +169,15 @@ namespace DoodleJumpClone
         private void RestartTheGame()
         {
             Settings.SetSettings(
-                435, // widthOfFild
-                760, // heightOfFild
-                20,  // widthOfFPad
-                5,   // heightOfFPad
-                10,  // widthOfPlayerCharacter
-                15); // heightOfPlayerCharacter
+                435,  // widthOfFild
+                760,  // heightOfFild
+                20,   // widthOfFPad
+                5,    // heightOfFPad
+                10,   // widthOfPlayerCharacter
+                15,   // heightOfPlayerCharacter
+                0.6); // heightOfShearСoefficient
 
             score = 0;
-
-            heightOfShear = (int)(Settings.HeightOfFild * 0.6);
 
             player = new PlayerCharacter();
 
