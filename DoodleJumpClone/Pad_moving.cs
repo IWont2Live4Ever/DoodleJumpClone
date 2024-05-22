@@ -24,7 +24,7 @@ namespace DoodleJumpClone
         public Pad_moving()
         {
             this.Hitbox = new Hitbox(0, 0, Settings.WidthOfPad_defoult, Settings.HeightOfPad_defoult);
-            this.Direction = Direction.None;
+            this.Direction = Direction.Left;
             this.FlagTouched = false;
         }
     }
