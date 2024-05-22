@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +14,8 @@ namespace DoodleJumpClone
         public static int HeightOfPad_defoult {  get; private set; }
         public static int WidthOfPlayerCharacter_defoult { get; private set; }
         public static int HeightOfPlayerCharacter_defoult { get; private set; }
+        public static int HeightOfShear { get; private set; }
+        public static int StartingHeight { get; private set; }
 
         public static void SetSettings(
             int widthOfFild,
@@ -21,7 +23,8 @@ namespace DoodleJumpClone
             int widthOfFPad,
             int heightOfFPad,
             int widthOfPlayerCharacter,
-            int heightOfPlayerCharacter) 
+            int heightOfPlayerCharacter,
+            double heightOfShearСoefficient) 
         {
             WidthOfFild = widthOfFild;
             HeightOfFild = heightOfFild; 
@@ -29,6 +32,8 @@ namespace DoodleJumpClone
             HeightOfPad_defoult = heightOfFPad;
             WidthOfPlayerCharacter_defoult = widthOfPlayerCharacter;
             HeightOfPlayerCharacter_defoult = heightOfPlayerCharacter;
+            HeightOfShear = Convert.ToInt32(HeightOfFild * heightOfShearСoefficient);
+            StartingHeight = Convert.ToInt32(HeightOfFild * 0.9);
         }
 
     }
