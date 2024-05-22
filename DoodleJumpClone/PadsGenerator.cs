@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +12,7 @@ namespace DoodleJumpClone
         public static List<Pad> GeneratePads(int count)
         {
             var pads = new List<Pad>();
-            int step = (int)(Settings.HeightOfFild * 0.9 / count);
+            int step = Settings.StartingHeight / count;
 
             var x = 0;
             for (int i = 0; i < count; i++)
@@ -47,7 +47,7 @@ namespace DoodleJumpClone
         {
             pads.Add(new Pad(
                 (Settings.WidthOfFild - Settings.WidthOfPad_defoult) / 2,
-                (int)(Settings.HeightOfFild * 0.9)));
+                Settings.StartingHeight));
         }
         public static void AddGeneratedPad(this List<Pad> pads)
         {
