@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +19,7 @@ namespace DoodleJumpClone
                 y,
                 Settings.WidthOfPlayerCharacter_defoult,
                 Settings.HeightOfPlayerCharacter_defoult);
-            this.Direction = Direction.None;
+            this.Direction = Direction.Left;
             this.Velosity = Vector.GetZeroVector();
             this.FlagJumpOpportunity = true;
         }
@@ -27,10 +27,10 @@ namespace DoodleJumpClone
         {
             this.Hitbox = new Hitbox(
                 (Settings.WidthOfFild - Settings.WidthOfPlayerCharacter_defoult) / 2,
-                Convert.ToInt32(Settings.HeightOfFild * 0.9) - Settings.HeightOfPlayerCharacter_defoult,
+                Settings.StartingHeight - Settings.HeightOfPlayerCharacter_defoult,
                 Settings.WidthOfPlayerCharacter_defoult,
                 Settings.HeightOfPlayerCharacter_defoult);
-            this.Direction = Direction.None;
+            this.Direction = Direction.Left;
             this.Velosity = Vector.GetZeroVector();
             this.FlagJumpOpportunity = true;
         }
@@ -49,12 +49,13 @@ namespace DoodleJumpClone
             if (this.FlagJumpOpportunity)
             {
                 this.FlagJumpOpportunity = false;
-                this.Velosity.Y -= 100;
+                this.Velosity.Y += 100;
             }
         }
         public void Correct()
         {
             Velosity.GravityCorrection();
+
             if (this.Hitbox.X >= Settings.WidthOfFild)
             {
                 this.Hitbox.X = 0;
