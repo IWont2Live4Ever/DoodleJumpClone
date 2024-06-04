@@ -16,7 +16,7 @@ namespace DoodleJumpClone
         int score;
         int highScore;
 
-        Vector velosity;
+        Vector GoDownVector = new Vector(0, 4);
 
         bool goLeft, goRight, Jump;
 
@@ -88,51 +88,11 @@ namespace DoodleJumpClone
 
         private void GameTimerEvent(object sender, EventArgs e)
         {
-            if (goLeft)
-                player.MoveLeft();
-            if (goRight)
-                player.MoveRight();
-            if (Jump)
-            {
-                Jump = false;
-                player.Jump();
-            }
+            bool goDown = false;
 
-            player.Hitbox.MoveTo(player.Velosity);
-            player.Correct();
-            /*
-            if (player.Hitbox.Y < Settings.HeightOfShear)
-            {
-                velosity = new Vector(0, -player.Velosity.Y);
-                player.Velosity.Y = 0;
-            }
+            MovePlayer(ref goDown);
 
-            if (velosity.Y < 0)
-            {
-                player.Velosity.Y = velosity.Y;
-                velosity = new Vector();
-            }
-            */
-            bool isOnPad = false;
-            foreach (var pad in pads)
-            {
-                if (!Equals(velosity, Vector.ZeroVector))
-                    pad.Hitbox.MoveTo(velosity);
-
-                if (pad.Hitbox.Y > (int)(Settings.HeightOfFild * 0.9))
-                {
-                    pads.Remove(pad);
-                    pads.AddGeneratedPad();
-                }
-
-                if (pad.Hitbox.HasOnTop(player.Hitbox) && player.Velosity.Y > 0)
-                {
-                    PadWasTouched(pad);
-                    isOnPad = true;
-                }
-            }
-            if (!isOnPad)
-                player.IsOnPad = false;
+            CheckPuds(goDown);
             
             if (player.Hitbox.Y > (int)(Settings.HeightOfFild * 0.95))
                 GameOver();
@@ -159,8 +119,8 @@ namespace DoodleJumpClone
                 Brushes.Red,
                 player.Hitbox.X,
                 player.Hitbox.Y,
-                player.Hitbox.Width,
-                player.Hitbox.Height);
+                player.Hitbox.Width + 3,
+                player.Hitbox.Height + 3);
         }
         
         private void RestartTheGame()
@@ -180,8 +140,6 @@ namespace DoodleJumpClone
             score = 0;
             txtScore.Text = "Score: " + score.ToString();
 
-            velosity = Vector.GetZeroVector();
-
             player = new PlayerCharacter();
 
             pads = PadsGenerator.GeneratePads(10);
@@ -196,7 +154,6 @@ namespace DoodleJumpClone
             player.IsOnPad = true;
             player.FlagJumpOpportunity = true;
             player.Velosity.Y = 0;
-            velosity = new Vector();
 
             if (!pad.FlagTouched)
             {
@@ -215,6 +172,55 @@ namespace DoodleJumpClone
             highScore = Math.Max(highScore, score);
             txtHighScore.Text = "High Score: " + highScore.ToString();
             txtHighScore.ForeColor = Color.Black;
+        }
+
+        private void MovePlayer(ref bool shouldGoDown)
+        {
+            if (player.Hitbox.Y < Settings.HeightOfShear)
+            {
+                player.Hitbox.MoveTo(GoDownVector);
+                shouldGoDown = true;
+            }
+
+            if (goLeft)
+                player.MoveLeft();
+            if (goRight)
+                player.MoveRight();
+            if (Jump)
+            {
+                Jump = false;
+                player.Jump();
+            }
+
+            player.Hitbox.MoveTo(player.Velosity);
+            player.Correct();
+        }
+
+        private void CheckPuds(bool shouldGoDown)
+        {
+            bool isOnPad = false;
+            for (int i = 0; i < pads.Count(); i++)
+            {
+                Pad pad = pads[i];
+
+                if (shouldGoDown)
+                    pad.Hitbox.MoveTo(GoDownVector);
+
+                if (pad.Hitbox.Y > (int)(Settings.HeightOfFild * 0.9))
+                {
+                    pads.Remove(pad);
+                    pads.AddGeneratedPad();
+                }
+
+                if (pad.Hitbox.HasOnTop(player.Hitbox) && player.Velosity.Y > 0)
+                {
+                    PadWasTouched(pad);
+                    isOnPad = true;
+                }
+            }
+
+            if (!isOnPad)
+                player.IsOnPad = false;
         }
 
         private void DoodleJumpClone_Load(object sender, EventArgs e) {}
