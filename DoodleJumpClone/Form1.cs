@@ -99,18 +99,12 @@ namespace DoodleJumpClone
             }
 
             player.Hitbox.MoveTo(player.Velosity);
+            player.Correct();
             /*
             if (player.Hitbox.Y < Settings.HeightOfShear)
             {
-                if (Equals(velosity, Vector.ZeroVector))
-                {
-                    velosity = new Vector(0, -player.Velosity.Y);
-                    player.Velosity.Y = 0;
-                }
-                else
-                {
-                    velosity.GravityCorrection();
-                }
+                velosity = new Vector(0, -player.Velosity.Y);
+                player.Velosity.Y = 0;
             }
 
             if (velosity.Y < 0)
@@ -118,7 +112,8 @@ namespace DoodleJumpClone
                 player.Velosity.Y = velosity.Y;
                 velosity = new Vector();
             }
-
+            */
+            bool isOnPad = false;
             foreach (var pad in pads)
             {
                 if (!Equals(velosity, Vector.ZeroVector))
@@ -130,20 +125,15 @@ namespace DoodleJumpClone
                     pads.AddGeneratedPad();
                 }
 
-                if (pad.Hitbox.HasOnTop(player.Hitbox))
+                if (pad.Hitbox.HasOnTop(player.Hitbox) && player.Velosity.Y > 0)
                 {
-                    player.FlagJumpOpportunity = true;
-                    player.Velosity.Y = 0;
-                    velosity = Vector.GetZeroVector();
                     PadWasTouched(pad);
-                }
-
-                if (pad.Hitbox.CollidesWith(player.Hitbox))
-                {
-                    player.Velosity.Rotate(Math.PI);
+                    isOnPad = true;
                 }
             }
-            */
+            if (!isOnPad)
+                player.IsOnPad = false;
+            
             if (player.Hitbox.Y > (int)(Settings.HeightOfFild * 0.95))
                 GameOver();
 
@@ -181,8 +171,8 @@ namespace DoodleJumpClone
             Settings.SetSettings(
                 435,  // widthOfFild
                 760,  // heightOfFild
-                20,   // widthOfFPad
-                5,    // heightOfFPad
+                30,   // widthOfFPad
+                10,   // heightOfFPad
                 10,   // widthOfPlayerCharacter
                 15,   // heightOfPlayerCharacter
                 0.6); // heightOfShearСoefficient
@@ -203,6 +193,11 @@ namespace DoodleJumpClone
 
         private void PadWasTouched(Pad pad)
         {
+            player.IsOnPad = true;
+            player.FlagJumpOpportunity = true;
+            player.Velosity.Y = 0;
+            velosity = new Vector();
+
             if (!pad.FlagTouched)
             {
                 pad.FlagTouched = true;
