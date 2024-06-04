@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace DoodleJumpClone
 {
@@ -28,17 +28,17 @@ namespace DoodleJumpClone
             }
         }
 
-        public static readonly Vector ZeroVector = new Vector(0, 0);
+        public static readonly Vector ZeroVector = new Vector();
         public static Vector operator -(Vector a, Vector b) => new Vector(a.X - b.X, a.Y - b.Y);
 
         public static Vector operator *(Vector a, double k) => new Vector(a.X * k, a.Y * k);
 
-        public static Vector operator /(Vector a, double k) => new Vector   (a.X / k, a.Y / k);
+        public static Vector operator /(Vector a, double k) => new Vector(a.X / k, a.Y / k);
 
         public static Vector operator *(double k, Vector a) => a * k;
 
         public static Vector operator +(Vector a, Vector b) => new Vector(a.X + b.X, a.Y + b.Y);
-        
+
         public bool Equals(Vector a, Vector b) => a.X == b.X && a.Y == b.Y;
 
         public Vector Normalize() => Length > 0 ? this * (1 / Length) : this;
@@ -52,6 +52,10 @@ namespace DoodleJumpClone
 
         public static Vector GetZeroVector() => new Vector();
 
-        public void GravityCorrection() => new Vector(this.X * 0.9, this.Y + 10);
+        public void GravityCorrection() 
+        {
+            this.X *= 0.9;
+            this.Y += 1;
+        }
     }
 }
