@@ -8,8 +8,8 @@ namespace DoodleJumpClone
 {
     internal class Hitbox
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int X { get; private set; }
+        public int Y { get; private set; }
         public int Width { get; protected set; }
         public int Height { get; protected set; }
 
@@ -28,16 +28,21 @@ namespace DoodleJumpClone
         }
         public void MoveTo(Vector vector)
         {
-            this.X += (int) vector.X;
-            this.Y += (int) vector.Y;
+            if (this.X + (int)vector.X >= Settings.WidthOfFild)
+                this.X = Settings.WidthOfFild;
+            else
+                this.X += (int)vector.X;
+
+            if (this.Y + (int)vector.Y >= Settings.HeightOfFild)
+                this.Y = Settings.HeightOfFild;
+            else
+                this.Y += (int) vector.Y;
         }
 
         public bool CollidesWith(Hitbox rect)
         {
-            return (this.X < (rect.X + rect.Width) &&
-                (this.X + this.Width) > rect.X) &&
-                (this.Y < (rect.Y + rect.Height) &&
-                (this.Y + this.Height) > rect.Y);
+            return ( this.X < (rect.X + rect.Width) && (this.X + this.Width) > rect.X ) &&
+                ( this.Y < (rect.Y + rect.Height) || (this.Y + this.Height) > rect.Y );
         }
         public bool HasOnTop(Hitbox rect)
         {
