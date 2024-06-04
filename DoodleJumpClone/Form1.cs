@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,6 +32,7 @@ namespace DoodleJumpClone
         public DoodleJumpClone()
         {
             InitializeComponent();
+            RestartTheGame();
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
@@ -39,15 +40,14 @@ namespace DoodleJumpClone
             if (instructionsReadFlag)
             {
                 instructionsReadFlag = false;
-
                 listBoxWithInstructions.Visible = false;
-
-                RestartTheGame();
+                return;
             }
 
             if (!gameIsGoingOnFlag && e.KeyCode == Keys.Enter)
             {
                 RestartTheGame();
+                return;
             }
 
             switch (e.KeyCode)
@@ -116,7 +116,7 @@ namespace DoodleJumpClone
             if (velosity.Y < 0)
             {
                 player.Velosity.Y = velosity.Y;
-                velosity = Vector.GetZeroVector();
+                velosity = new Vector();
             }
 
             foreach (var pad in pads)
@@ -129,6 +129,7 @@ namespace DoodleJumpClone
                     pads.Remove(pad);
                     pads.AddGeneratedPad();
                 }
+
                 if (pad.Hitbox.HasOnTop(player.Hitbox))
                 {
                     player.FlagJumpOpportunity = true;
@@ -136,6 +137,7 @@ namespace DoodleJumpClone
                     velosity = Vector.GetZeroVector();
                     PadWasTouched(pad);
                 }
+
                 if (pad.Hitbox.CollidesWith(player.Hitbox))
                 {
                     player.Velosity.Rotate(Math.PI);
