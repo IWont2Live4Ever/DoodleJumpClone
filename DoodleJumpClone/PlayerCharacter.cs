@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace DoodleJumpClone
 {
     internal class PlayerCharacter
     {
+        public bool IsOnPad;
         public Hitbox Hitbox { get; private set; }
         public Direction Direction;
         public Vector Velosity { get; set; }
@@ -20,7 +15,7 @@ namespace DoodleJumpClone
                 Settings.WidthOfPlayerCharacter_defoult,
                 Settings.HeightOfPlayerCharacter_defoult);
             this.Direction = Direction.Left;
-            this.Velosity = Vector.GetZeroVector();
+            this.Velosity = new Vector();
             this.FlagJumpOpportunity = true;
         }
         public PlayerCharacter()
@@ -37,33 +32,31 @@ namespace DoodleJumpClone
         public void MoveRight()
         {
             this.Direction = Direction.Right;
-            this.Velosity.X += 5;
-            this.Correct();
+            this.Velosity.X += 2;
         }
         public void MoveLeft()
         {
             this.Direction = Direction.Left;
-            this.Velosity.X -= 5;
-            this.Correct();
+            this.Velosity.X -= 2;
         }
         public void Jump()
         {
             if (this.FlagJumpOpportunity)
             {
                 this.FlagJumpOpportunity = false;
-                this.Velosity.Y -= 10;
-                this.Correct();
+                this.Velosity.Y -= 15;
             }
         }
         public void Correct()
         {
-            this.Velosity.GravityCorrection();
+            if (!this.IsOnPad)
+                this.Velosity.GravityCorrection();
 
-            if (this.Hitbox.X >= Settings.WidthOfFild)
+            if (this.Hitbox.X >= Settings.WidthOfFild - 3)
             {
                 this.Hitbox.X = 0;
             }
-            if (this.Hitbox.X <= 0)
+            if (this.Hitbox.X <= 3)
             {
                 this.Hitbox.X = Settings.WidthOfFild;
             }
