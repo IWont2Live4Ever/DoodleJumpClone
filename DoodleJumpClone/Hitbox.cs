@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,14 +34,14 @@ namespace DoodleJumpClone
 
         public bool CollidesWith(Hitbox rect)
         {
-            return this.X < (rect.X + rect.Width) &&
-                this.Y < (rect.Y + rect.Height) &&
-                (this.  X + this.Width) > rect.X &&
-                (this.Y + this.Height) > rect.Y;
+            return (this.X < (rect.X + rect.Width) &&
+                (this.X + this.Width) > rect.X) &&
+                (this.Y < (rect.Y + rect.Height) &&
+                (this.Y + this.Height) > rect.Y);
         }
         public bool HasOnTop(Hitbox rect)
         {
-            return rect.Y + rect.Width == this.Y;
+            return (Math.Abs(rect.Y + rect.Height - this.Y) <= 5) && this.CollidesWith(rect);
         }
     }
 }
