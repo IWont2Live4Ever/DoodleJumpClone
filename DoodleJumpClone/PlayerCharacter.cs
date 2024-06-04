@@ -1,3 +1,5 @@
+using DoodleJumpClone.Properties;
+
 namespace DoodleJumpClone
 {
     internal class PlayerCharacter
@@ -32,12 +34,12 @@ namespace DoodleJumpClone
         public void MoveRight()
         {
             this.Direction = Direction.Right;
-            this.Velosity.X += 2;
+            this.Velosity.X += 1;
         }
         public void MoveLeft()
         {
             this.Direction = Direction.Left;
-            this.Velosity.X -= 2;
+            this.Velosity.X -= 1;
         }
         public void Jump()
         {
@@ -54,11 +56,11 @@ namespace DoodleJumpClone
 
             if (this.Hitbox.X >= Settings.WidthOfFild - 3)
             {
-                this.Hitbox.X = 0;
+                this.Hitbox.MoveTo(0, this.Hitbox.Y);
             }
             if (this.Hitbox.X <= 3)
             {
-                this.Hitbox.X = Settings.WidthOfFild;
+                this.Hitbox.MoveTo(Settings.WidthOfFild, this.Hitbox.Y);
             }
         }
     }
