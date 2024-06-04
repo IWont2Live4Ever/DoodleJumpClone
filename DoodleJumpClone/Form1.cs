@@ -16,11 +16,12 @@ namespace DoodleJumpClone
         int score;
         int highScore;
 
-        Vector velosity = Vector.GetZeroVector();
+        Vector velosity;
 
         bool goLeft, goRight, Jump;
 
         bool instructionsReadFlag = true;
+        bool gameIsGoingOnFlag = false;
 
         Graphics graphics;
 
@@ -30,7 +31,6 @@ namespace DoodleJumpClone
 
         public DoodleJumpClone()
         {
-            RestartTheGame();
             InitializeComponent();
         }
 
@@ -39,9 +39,15 @@ namespace DoodleJumpClone
             if (instructionsReadFlag)
             {
                 instructionsReadFlag = false;
+
                 listBoxWithInstructions.Visible = false;
-                gameTimer = new System.Windows.Forms.Timer();
-                gameTimer.Start();
+
+                RestartTheGame();
+            }
+
+            if (!gameIsGoingOnFlag && e.KeyCode == Keys.Enter)
+            {
+                RestartTheGame();
             }
 
             switch (e.KeyCode)
@@ -87,11 +93,13 @@ namespace DoodleJumpClone
             if (goRight)
                 player.MoveRight();
             if (Jump)
+            {
+                Jump = false;
                 player.Jump();
+            }
 
             player.Hitbox.MoveTo(player.Velosity);
-            player.Correct();
-
+            /*
             if (player.Hitbox.Y < Settings.HeightOfShear)
             {
                 if (Equals(velosity, Vector.ZeroVector))
@@ -110,9 +118,6 @@ namespace DoodleJumpClone
                 player.Velosity.Y = velosity.Y;
                 velosity = Vector.GetZeroVector();
             }
-
-            if (player.Hitbox.Y > (int)(Settings.HeightOfFild * 0.95))
-                GameOver();
 
             foreach (var pad in pads)
             {
@@ -136,17 +141,17 @@ namespace DoodleJumpClone
                     player.Velosity.Rotate(Math.PI);
                 }
             }
+            */
+            if (player.Hitbox.Y > (int)(Settings.HeightOfFild * 0.95))
+                GameOver();
 
             pictureBox.Invalidate();
         }
 
-        int I = 100; // Переменная для теста вывода изображения
+        
         private void UpdatePictureBoxGraphics(object sender, PaintEventArgs e)
         {
             graphics = e.Graphics;
-
-            graphics.FillEllipse(Brushes.Red, (int)(Settings.WidthOfFild / 2), (int)(Settings.HeightOfFild / 2), I, I); // Эти две строчки тестируют вывод изображения
-            I += 20;                                                                                                    // Круг должен увеличиваться со временем
 
             foreach (var pad in pads)
             {
@@ -168,6 +173,9 @@ namespace DoodleJumpClone
         
         private void RestartTheGame()
         {
+            gameIsGoingOnFlag = true;
+            (goLeft, goRight, Jump) = (false, false, false);
+
             Settings.SetSettings(
                 435,  // widthOfFild
                 760,  // heightOfFild
@@ -178,11 +186,19 @@ namespace DoodleJumpClone
                 0.6); // heightOfShearСoefficient
 
             score = 0;
+            txtScore.Text = "Score: " + score.ToString();
+
+            velosity = Vector.GetZeroVector();
 
             player = new PlayerCharacter();
 
             pads = PadsGenerator.GeneratePads(10);
+
+            gameTimer = new System.Windows.Forms.Timer();
+            gameTimer.Enabled = true;
+            gameTimer.Start();
         }
+
         private void PadWasTouched(Pad pad)
         {
             if (!pad.FlagTouched)
@@ -192,16 +208,16 @@ namespace DoodleJumpClone
                 txtScore.Text = "Score: " + score.ToString();
             }
         }
+
         private void GameOver()
         {
+            gameIsGoingOnFlag = false;
             gameTimer.Stop();
+            gameTimer.Enabled = false;
 
-            if (score > highScore)
-            {
-                highScore = score;
-                txtHighScore.Text = "High Score: " + highScore.ToString();
-                txtHighScore.ForeColor = Color.Black;
-            }
+            highScore = Math.Max(highScore, score);
+            txtHighScore.Text = "High Score: " + highScore.ToString();
+            txtHighScore.ForeColor = Color.Black;
         }
 
         private void DoodleJumpClone_Load(object sender, EventArgs e) {}
