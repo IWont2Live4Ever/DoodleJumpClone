@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,9 +45,11 @@ namespace DoodleJumpClone
 
         private static void AddLaunchPad(this List<Pad> pads)
         {
-            pads.Add(new Pad(
+            Pad launchPad = new Pad(
                 (Settings.WidthOfFild - Settings.WidthOfPad_defoult) / 2,
-                Settings.StartingHeight));
+                Settings.StartingHeight);
+            launchPad.FlagTouched = true;
+            pads.Add(launchPad);
         }
         public static void AddGeneratedPad(this List<Pad> pads)
         {
